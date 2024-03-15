@@ -29,13 +29,12 @@ customerRoute.get("/", async (req: Request, res: Response) => {
     const usecase = new ListCustomerUseCase(new CustomerRepository());
     try {
         const output = await usecase.execute({});
-        res.send(output);
+        // res.send(output);
+        res.format({
+            json: async () => res.send(output),
+            xml: async () => res.send(CustomerPresenter.listXML(output)),
+        });
     } catch (error) {
         res.status(500).send(error);
     }
-
-    // res.format({
-    //     json: async () => res.send(output),
-    //     xml: async () => res.send(CustomerPresenter.listXML(output)),
-    // });
 });
